@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState, useCallback, useEffect, RefObject } from 'react'
+import React, { ReactNode, createRef, useState, useCallback, useEffect, RefObject } from 'react'
 import style from './style.module.css'
 type Props = {
   children: ReactNode
@@ -8,7 +8,7 @@ type Props = {
 
 function Slide({ children }: Props) {
 
-  const slideRef = useRef<HTMLDivElement>();
+  const slideRef = createRef<HTMLDivElement>();
   const [startEv, setStartEv] = useState(false)
   const [positonX, setPositionX] = useState(0)
 
@@ -25,7 +25,7 @@ function Slide({ children }: Props) {
     return () => {
       current?.removeEventListener('mousemove', eventMouseMove);
     }
-  }, [startEv, eventMouseMove]);
+  }, [startEv, eventMouseMove, slideRef]);
 
   return (
     <div
