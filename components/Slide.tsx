@@ -1,4 +1,11 @@
-import React, { ReactNode, createRef, useState, useCallback, useEffect, RefObject } from 'react'
+import React, {
+  ReactNode,
+  createRef,
+  useState,
+  useCallback,
+  useEffect,
+  SetStateAction
+} from 'react'
 import style from './style.module.css'
 type Props = {
   children: ReactNode
@@ -11,6 +18,7 @@ function Slide({ children }: Props) {
   const slideRef = createRef<HTMLDivElement>();
   const [startEv, setStartEv] = useState(false)
   const [positonX, setPositionX] = useState(0)
+  const [initpositinX, setInitpositinX] = useState(0)
 
   const eventMouseMove = useCallback((event) => {
     setPositionX(event.offsetX)
@@ -27,11 +35,16 @@ function Slide({ children }: Props) {
     }
   }, [startEv, eventMouseMove, slideRef]);
 
+  function starEvent(event: { clientX: SetStateAction<number>; }) {
+    setStartEv(true)
+    setInitpositinX(event.clientX)
+  }
+
   return (
     <div
       ref={ slideRef }
       className={ style.movePanel }
-      onMouseDown={ () => setStartEv(true) }
+      onMouseDown={ starEvent }
       onMouseUp={ () => setStartEv(false) }
       onMouseLeave={ () => setStartEv(false) }
     >
