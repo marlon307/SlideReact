@@ -21,8 +21,10 @@ function Slide({ children }: Props) {
   const [initpositinX, setInitpositinX] = useState(0)
 
   const eventMouseMove = useCallback((event) => {
-    setPositionX(event.offsetX)
-  }, [])
+    setPositionX(initpositinX - event.offsetX)
+    console.log(initpositinX - event.offsetX);
+
+  }, [initpositinX])
 
   useEffect(() => {
     const { current } = slideRef;
@@ -35,9 +37,11 @@ function Slide({ children }: Props) {
     }
   }, [startEv, eventMouseMove, slideRef]);
 
-  function starEvent(event: { clientX: SetStateAction<number>; }) {
+  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
     setStartEv(true)
-    setInitpositinX(event.clientX)
+    setInitpositinX(event.nativeEvent.offsetX);
+
+    console.log(event.nativeEvent.offsetX);
   }
 
   return (
@@ -50,7 +54,8 @@ function Slide({ children }: Props) {
     >
       <div
         className={ style.slide }
-        style={ { transform: `translateX(${positonX}px)` } }>
+        style={ { transform: `translateX(${positonX}px)` } }
+      >
         { children }
       </div>
     </div>
