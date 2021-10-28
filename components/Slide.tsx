@@ -11,7 +11,9 @@ type Props = {
   children: ReactNode
 }
 
+
 // Example https://codesandbox.io/s/remove-listener-with-callback-u4h22?file=/src/App.js
+// https://medium.com/tinyso/how-to-create-the-responsive-and-swipeable-carousel-slider-component-in-react-99f433364aa0
 
 function Slide({ children }: Props) {
 
