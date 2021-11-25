@@ -18,15 +18,19 @@ type Props = {
 function Slide({ children }: Props) {
 
   const slideRef = createRef<HTMLDivElement>();
-  const [startEv, setStartEv] = useState(false)
-  const [positonX, setPositionX] = useState(0)
-  const [initpositinX, setInitpositinX] = useState(0)
+  const [startEv, setStartEv] = useState(false);
+  const [positonX, setPositionX] = useState(0);
+  const [initpositinX, setInitpositinX] = useState(0);
 
-  const eventMouseMove = useCallback((event) => {
-    setPositionX(initpositinX - event.offsetX)
-    console.log(initpositinX - event.offsetX);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const eventMouseMove = (event) => {
 
-  }, [initpositinX])
+    console.log(initpositinX - event.layerX);
+
+
+    setPositionX(initpositinX - event.layerX);
+
+  }
 
   useEffect(() => {
     const { current } = slideRef;
