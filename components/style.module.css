@@ -4,7 +4,7 @@
   justify-content: flex-start;
   width: 500px;
   height: 500px;
-  background: rgba(51, 51, 51, 0.137);
+  background: #33333323;
 }
 
 .movePanel {
@@ -16,5 +16,5 @@
   flex: none;
   width: 100%;
   height: 100%;
-  background: rgba(255, 0, 0, 0.39);
+  background: #ff000063;
 }
