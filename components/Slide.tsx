@@ -18,14 +18,17 @@ type Props = {
 function Slide({ children }: Props) {
 
   const slideRef = createRef<HTMLDivElement>();
-  const [startEv, setStartEv] = useState(false)
-  const [positonX, setPositionX] = useState(0)
-  const [initpositinX, setInitpositinX] = useState(0)
+  const [startEv, setStartEv] = useState(false);
+  const [positonX, setPositionX] = useState(0);
+  const [initpositinX, setInitpositinX] = useState(0);
+  const [finishPosition, setFinishPosition] = useState(0);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const eventMouseMove = (event) => {
+  const eventMouseMove = (event: { layerX: number; }) => {
     // setPositionX(initpositinX - event.offsetX)
-    const positionReset = event.layerX - initpositinX
+    const positionReset = event.layerX - initpositinX - finishPosition;
+    console.log(positionReset);
+
     setPositionX(positionReset + 1);
   }
 
@@ -43,8 +46,12 @@ function Slide({ children }: Props) {
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
     setStartEv(true)
     setInitpositinX(event.nativeEvent.offsetX);
+  }
 
-    console.log(event.nativeEvent.offsetX);
+  function finishEvent(event) {
+    setStartEv(false);
+    console.log(event);
+    setFinishPosition(finishPosition + event.clientX);
   }
 
   return (
@@ -52,8 +59,8 @@ function Slide({ children }: Props) {
       ref={ slideRef }
       className={ style.movePanel }
       onMouseDown={ starEvent }
-      onMouseUp={ () => setStartEv(false) }
-      onMouseLeave={ () => setStartEv(false) }
+      onMouseUp={ finishEvent }
+      onMouseLeave={ finishEvent }
     >
       <div
         className={ style.slide }
