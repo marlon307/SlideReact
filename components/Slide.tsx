@@ -21,15 +21,30 @@ function Slide({ children }: Props) {
   const [startEv, setStartEv] = useState(false);
   const [positonX, setPositionX] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0);
-  const [finishPosition, setFinishPosition] = useState(0);
+  const [index, setIndex] = useState(0);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const eventMouseMove = (event: { layerX: number; }) => {
-    // setPositionX(initpositinX - event.offsetX)
-    const positionReset = event.layerX - initpositinX - finishPosition;
-    console.log(positionReset);
-
+  const eventMouseMove = (event: any) => {
+    const positionReset = event.layerX - initpositinX;
     setPositionX(positionReset + 1);
+  }
+
+  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
+    setStartEv(true)
+    setInitpositinX(event.nativeEvent.offsetX);
+  }
+
+  function finishEvent() {
+    setStartEv(false);
+    const nextindex = slideRef.current?.offsetWidth!;
+
+    if (positonX > 0) {
+      setIndex(index - 1);
+      setPositionX(nextindex * index);
+    } else {
+      setIndex(index + 1);
+      setPositionX(-nextindex * index);
+    }
   }
 
   useEffect(() => {
@@ -42,17 +57,6 @@ function Slide({ children }: Props) {
       current?.removeEventListener('mousemove', eventMouseMove);
     }
   }, [startEv, eventMouseMove, slideRef]);
-
-  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
-    setStartEv(true)
-    setInitpositinX(event.nativeEvent.offsetX);
-  }
-
-  function finishEvent(event) {
-    setStartEv(false);
-    console.log(event);
-    setFinishPosition(finishPosition + event.clientX);
-  }
 
   return (
     <div

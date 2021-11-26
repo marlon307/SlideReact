@@ -10,6 +10,7 @@
 .movePanel {
   overflow: hidden;
   display: flex;
+  transition: 0.8s;
 }
 
 .panel {
