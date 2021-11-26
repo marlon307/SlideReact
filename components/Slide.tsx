@@ -2,15 +2,12 @@ import React, {
   ReactNode,
   createRef,
   useState,
-  useCallback,
   useEffect,
-  SetStateAction
 } from 'react'
 import style from './style.module.css'
 type Props = {
   children: ReactNode
 }
-
 
 // Example https://codesandbox.io/s/remove-listener-with-callback-u4h22?file=/src/App.js
 // https://medium.com/tinyso/how-to-create-the-responsive-and-swipeable-carousel-slider-component-in-react-99f433364aa0
@@ -21,7 +18,7 @@ function Slide({ children }: Props) {
   const [startEv, setStartEv] = useState(false);
   const [positonX, setPositionX] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(1);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const eventMouseMove = (event: any) => {
@@ -39,9 +36,13 @@ function Slide({ children }: Props) {
     const nextindex = slideRef.current?.offsetWidth!;
 
     if (positonX > 0) {
+      console.log('right');
+
       setIndex(index - 1);
       setPositionX(nextindex * index);
     } else {
+      console.log('lef');
+
       setIndex(index + 1);
       setPositionX(-nextindex * index);
     }
@@ -50,8 +51,8 @@ function Slide({ children }: Props) {
   useEffect(() => {
     const { current } = slideRef;
 
-    if (startEv) current?.addEventListener('mousemove', eventMouseMove)
-    else current?.removeEventListener('mousemove', eventMouseMove)
+    if (startEv) current?.addEventListener('mousemove', eventMouseMove);
+    else current?.removeEventListener('mousemove', eventMouseMove);
 
     return () => {
       current?.removeEventListener('mousemove', eventMouseMove);

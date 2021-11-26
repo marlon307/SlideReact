@@ -5,12 +5,12 @@
   width: 500px;
   height: 500px;
   background: #33333323;
+  /* transition: transform 0.8s; */
 }
 
 .movePanel {
   overflow: hidden;
   display: flex;
-  transition: 0.8s;
 }
 
 .panel {
