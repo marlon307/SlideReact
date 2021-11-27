@@ -24,7 +24,11 @@ function Slide({ children }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const eventMouseMove = (event: any) => {
     const positionReset = event.layerX - initpositinX;
-    setPositionX(finishPosition + positionReset + 1);
+    if (positonX < finishPosition) {
+      setPositionX(finishPosition + positionReset + 1);
+    } else {
+      setPositionX(finishPosition + positionReset - 1);
+    }
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
@@ -36,18 +40,18 @@ function Slide({ children }: Props) {
     setStartEv(false);
     const nextindex = slideRef.current?.offsetWidth!;
 
-    if (positonX > 0) {
-      console.log('right');
-      const calRight = nextindex * index;
+    if (positonX > finishPosition) {
       setIndex(index - 1);
+      const calRight = nextindex + finishPosition;
       setPositionX(calRight);
-      setFinishPosition(calRight)
+      setFinishPosition(calRight);
+      console.log(calRight, 'right');
     } else {
-      console.log('lef');
-      const calcLeft = -nextindex * index;
       setIndex(index + 1);
+      const calcLeft = -nextindex * index;
       setPositionX(calcLeft);
       setFinishPosition(calcLeft)
+      console.log(calcLeft, 'left');
     }
   }
 
