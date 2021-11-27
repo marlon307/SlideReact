@@ -24,11 +24,7 @@ function Slide({ children }: Props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const eventMouseMove = (event: any) => {
     const positionReset = event.layerX - initpositinX;
-    if (positonX < finishPosition) {
-      setPositionX(finishPosition + positionReset + 1);
-    } else {
-      setPositionX(finishPosition + positionReset - 1);
-    }
+    setPositionX(finishPosition + positionReset);
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
