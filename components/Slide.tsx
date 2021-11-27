@@ -69,7 +69,7 @@ function Slide({ children }: Props) {
     >
       <div
         className={ style.slide }
-        style={ { transform: `translateX(${positonX}px)` } }
+        style={ { transform: `translateX(${positonX}px)`, transition: `${startEv ? 'false' : '0.3s'}` } }
       >
         { children }
       </div>
