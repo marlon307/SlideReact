@@ -5,6 +5,8 @@
   width: 500px;
   height: 500px;
   background: #33333323;
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
 }
 
 .movePanel {
