@@ -17,13 +17,14 @@ function Slide({ children }: Props) {
   const slideRef = createRef<HTMLDivElement>();
   const [startEv, setStartEv] = useState(false);
   const [positonX, setPositionX] = useState(0);
+  const [finishPosition, setFinishPosition] = useState(0)
   const [initpositinX, setInitpositinX] = useState(0);
   const [index, setIndex] = useState(1);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const eventMouseMove = (event: any) => {
     const positionReset = event.layerX - initpositinX;
-    setPositionX(positionReset + 1);
+    setPositionX(finishPosition + positionReset + 1);
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
@@ -37,14 +38,16 @@ function Slide({ children }: Props) {
 
     if (positonX > 0) {
       console.log('right');
-
+      const calRight = nextindex * index;
       setIndex(index - 1);
-      setPositionX(nextindex * index);
+      setPositionX(calRight);
+      setFinishPosition(calRight)
     } else {
       console.log('lef');
-
+      const calcLeft = -nextindex * index;
       setIndex(index + 1);
-      setPositionX(-nextindex * index);
+      setPositionX(calcLeft);
+      setFinishPosition(calcLeft)
     }
   }
 
