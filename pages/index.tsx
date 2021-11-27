@@ -29,6 +29,11 @@ const Home: NextPage = () => {
             Panel 4
           </div>
         </SPanel>
+        <SPanel>
+          <div className={ styles.content }>
+            Panel 5
+          </div>
+        </SPanel>
       </Slide>
     </div>
   )
