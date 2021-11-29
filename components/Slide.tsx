@@ -21,26 +21,31 @@ function Slide({ children }: Props) {
   const [initpositinX, setInitpositinX] = useState(0);
   const [index, setIndex] = useState(1);
 
-  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
-    setStartEv(true)
-    setInitpositinX(event.nativeEvent.offsetX);
+  function prev() {
+    const nextindex = slideRef.current?.offsetWidth!;
+    setIndex(index - 1);
+    const calRight = nextindex + finishPosition;
+    setPositionX(calRight);
+    setFinishPosition(calRight);
+  }
+
+  function next() {
+    const nextindex = slideRef.current?.offsetWidth!;
+    setIndex(index + 1);
+    const calcLeft = -nextindex * index;
+    setPositionX(calcLeft);
+    setFinishPosition(calcLeft)
   }
 
   function finishEvent() {
     setStartEv(false);
-    const nextindex = slideRef.current?.offsetWidth!;
+    if (positonX > finishPosition) prev();
+    else next();
+  }
 
-    if (positonX > finishPosition) {
-      setIndex(index - 1);
-      const calRight = nextindex + finishPosition;
-      setPositionX(calRight);
-      setFinishPosition(calRight);
-    } else {
-      setIndex(index + 1);
-      const calcLeft = -nextindex * index;
-      setPositionX(calcLeft);
-      setFinishPosition(calcLeft)
-    }
+  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
+    setStartEv(true)
+    setInitpositinX(event.nativeEvent.offsetX);
   }
 
   useEffect(() => {
@@ -60,23 +65,26 @@ function Slide({ children }: Props) {
   }, [startEv, slideRef, initpositinX, finishPosition]);
 
   return (
-    <div
-      ref={ slideRef }
-      className={ style.movePanel }
-      onMouseDown={ starEvent }
-      onMouseUp={ finishEvent }
-      onMouseLeave={ finishEvent }
-    >
+    <>
       <div
-        className={ style.slide }
-        style={ {
-          transform: `translateX(${positonX}px)`,
-          transition: `${startEv ? 'none' : '0.3s'}`
-        } }
+        ref={ slideRef }
+        className={ style.movePanel }
+        onMouseDown={ starEvent }
+        onMouseUp={ finishEvent }
       >
-        { children }
+        <div
+          className={ style.slide }
+          style={ {
+            transform: `translateX(${positonX}px)`,
+            transition: `${startEv ? 'none' : '0.3s'}`
+          } }
+        >
+          { children }
+        </div>
       </div>
-    </div>
+      <button onClick={ prev }>Prev</button>
+      <button onClick={ next }>Next</button>
+    </>
   )
 }
 
