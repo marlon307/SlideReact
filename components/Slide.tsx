@@ -4,9 +4,10 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import style from './style.module.css'
+import style from './style.module.css';
+
 type Props = {
-  children: ReactNode
+  children: ReactNode;
 }
 
 function Slide({ children }: Props) {
@@ -14,7 +15,7 @@ function Slide({ children }: Props) {
   const slideRef = createRef<HTMLDivElement>();
   const [startEv, setStartEv] = useState(false);
   const [positonX, setPositionX] = useState(0);
-  const [finishPosition, setFinishPosition] = useState(0)
+  const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0);
   const [index, setIndex] = useState(1);
 
@@ -41,7 +42,7 @@ function Slide({ children }: Props) {
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
-    setStartEv(true)
+    setStartEv(true);
     setInitpositinX(event.nativeEvent.offsetX);
   }
 
