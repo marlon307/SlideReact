@@ -3,3 +3,9 @@
   height: 400px;
   margin: 8em auto;
 }
+
+.content {
+  width: 150px;
+  height: 150px;
+  background: #333;
+}

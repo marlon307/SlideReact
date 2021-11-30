@@ -25,7 +25,13 @@ function Slide({ children }: Props) {
     const calRight = nextindex + finishPosition;
     setPositionX(calRight);
     setFinishPosition(calRight);
+
   }
+
+  // const teste = [0, 1, 2, 4]
+  // teste.splice(2, 0, "Lene");
+
+  // console.log(teste);
 
   function next() {
     const nextindex = slideRef.current?.offsetWidth!;
@@ -34,14 +40,6 @@ function Slide({ children }: Props) {
     setPositionX(calcLeft);
     setFinishPosition(calcLeft)
   }
-  // https://www.youtube.com/watch?v=Uk8oGV_kVpg&ab_channel=MatheusBattisti-HoradeCodar
-
-  // const teste = [3, 1, 2, 5, 8];
-  // function addFinishPosition(arr) {
-  //   return arr.push(arr.splice(0, 1)[0]);
-  // }
-  // addFinishPosition(teste)
-  // console.log(teste);
 
   function finishEvent() {
     setStartEv(false);
