@@ -34,6 +34,14 @@ function Slide({ children }: Props) {
     setPositionX(calcLeft);
     setFinishPosition(calcLeft)
   }
+  // https://www.youtube.com/watch?v=Uk8oGV_kVpg&ab_channel=MatheusBattisti-HoradeCodar
+
+  // const teste = [3, 1, 2, 5, 8];
+  // function addFinishPosition(arr) {
+  //   return arr.push(arr.splice(0, 1)[0]);
+  // }
+  // addFinishPosition(teste)
+  // console.log(teste);
 
   function finishEvent() {
     setStartEv(false);
