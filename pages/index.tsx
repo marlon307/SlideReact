@@ -13,12 +13,12 @@ const Home: NextPage = () => {
           </div>
         </SPanel>
         <SPanel>
-          <div className={ styles.content }>
+          <div className={ styles.content2 }>
             Panel 2
           </div>
         </SPanel>
         <SPanel>
-          <div className={ styles.content }>
+          <div className={ styles.content3 }>
             Panel 3
           </div>
         </SPanel>

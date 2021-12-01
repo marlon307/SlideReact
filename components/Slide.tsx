@@ -21,32 +21,22 @@ function Slide({ children }: Props) {
 
   function prev() {
     setIndex(index - 1);
-
-    const nextindex = slideRef.current?.children[0].children[0].clientWidth!;
+    const nextindex = slideRef.current?.children[0].children[index].clientWidth!;
     const calRight = nextindex + finishPosition;
     setPositionX(calRight);
     setFinishPosition(calRight);
   }
 
-  // const teste = [0, 1, 2, 4]
-  // teste.splice(2, 0, "Lene");
-
-  useEffect(() => {
-    if (children?.length > index) {
-      console.log(slideRef.current?.children[0].children[index].clientWidth);
-    } else {
-      console.log('finish');
-    }
-  }, [index])
-
   function next() {
     setIndex(index + 1);
-
-    const nextindex = slideRef.current?.children[0].children[0].clientWidth!;
+    const nextindex = slideRef.current?.children[0].children[index - 1].clientWidth!;
     const calcLeft = -nextindex * index;
     setPositionX(calcLeft);
     setFinishPosition(calcLeft)
   }
+
+  // const teste = [0, 1, 2, 4]
+  // teste.splice(2, 0, "Lene");
 
   function finishEvent() {
     setStartEv(false);
