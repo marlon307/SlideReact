@@ -5,7 +5,8 @@
 }
 
 .content {
-  width: 150px;
+  width: 250px;
   height: 150px;
+  margin: 0 18px;
   background: #333;
 }
