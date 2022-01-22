@@ -16,6 +16,7 @@ function Slide({ children }: Props) {
   const [startEv, setStartEv] = useState(false);
   const [positonX, setPositionX] = useState(0);
   const [finishPosition, setFinishPosition] = useState(0);
+  const [oldPosition, setoldPosition] = useState(0)
   const [initpositinX, setInitpositinX] = useState(0);
   const [index, setIndex] = useState(1);
 
@@ -23,6 +24,7 @@ function Slide({ children }: Props) {
     setIndex(index - 1);
     const nextindex = slideRef.current?.children[0].children[index].clientWidth!;
     const calRight = nextindex + finishPosition;
+
     setPositionX(calRight);
     setFinishPosition(calRight);
   }
@@ -30,13 +32,10 @@ function Slide({ children }: Props) {
   function next() {
     setIndex(index + 1);
     const nextindex = slideRef.current?.children[0].children[index - 1].clientWidth!;
-    const calcLeft = -nextindex * index;
+    const calcLeft = -nextindex + positonX;
     setPositionX(calcLeft);
     setFinishPosition(calcLeft)
   }
-
-  // const teste = [0, 1, 2, 4]
-  // teste.splice(2, 0, "Lene");
 
   function finishEvent() {
     setStartEv(false);
