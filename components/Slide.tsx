@@ -7,7 +7,7 @@ import React, {
 import style from './style.module.css';
 
 type Props = {
-  children: ReactNode;
+  children: any;
 }
 
 function Slide({ children }: Props) {
@@ -18,6 +18,7 @@ function Slide({ children }: Props) {
   const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0);
   const [index, setIndex] = useState(0);
+  const [panels, setPanels] = useState<ReactNode>();
 
   function prev() {
     setIndex(index - 1);
@@ -25,7 +26,6 @@ function Slide({ children }: Props) {
     const calcLeft = previndex + finishPosition;
     setPositionX(calcLeft);
     setFinishPosition(calcLeft);
-
   }
 
   function next() {
@@ -34,7 +34,6 @@ function Slide({ children }: Props) {
     const calcRight = -nextindex + positonX;
     setPositionX(calcRight);
     setFinishPosition(calcRight);
-
   }
 
   function finishEvent() {
@@ -64,6 +63,15 @@ function Slide({ children }: Props) {
     }
   }, [startEv, slideRef, initpositinX, finishPosition]);
 
+  useEffect(() => {
+    setPanels(children);
+    const firstPanel = slideRef.current?.children[0].firstChild!;
+    const lastPanel = slideRef.current?.children[0].lastChild!;
+    console.log(lastPanel);
+
+    // slideRef.current?.children[0].insertBefore(lastPanel, null)
+  }, [panels])
+
   return (
     <>
       <div
@@ -79,7 +87,7 @@ function Slide({ children }: Props) {
             transition: `${startEv ? 'none' : '0.3s'}`
           } }
         >
-          { children }
+          { panels }
         </div>
       </div>
       <button onClick={ prev }>Prev</button>
