@@ -21,11 +21,7 @@ function Slide({ children }: Props) {
 
   function prev() {
     setIndex(index - 1);
-    console.log(index);
-
     const previndex = slideRef.current?.children[0].children[index - 1].clientWidth!;
-    console.log(previndex);
-
     const calcLeft = previndex + finishPosition;
     setPositionX(calcLeft);
     setFinishPosition(calcLeft);
@@ -34,7 +30,6 @@ function Slide({ children }: Props) {
 
   function next() {
     setIndex(index + 1);
-    console.log(index);
     const nextindex = slideRef.current?.children[0].children[index].clientWidth!;
     const calcRight = -nextindex + positonX;
     setPositionX(calcRight);
