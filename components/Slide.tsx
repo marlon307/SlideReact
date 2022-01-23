@@ -64,13 +64,8 @@ function Slide({ children }: Props) {
   }, [startEv, slideRef, initpositinX, finishPosition]);
 
   useEffect(() => {
-    setPanels(children);
-    const firstPanel = slideRef.current?.children[0].firstChild!;
-    const lastPanel = slideRef.current?.children[0].lastChild!;
-    console.log(lastPanel);
-
-    // slideRef.current?.children[0].insertBefore(lastPanel, null)
-  }, [panels])
+    setPanels([children[children.length - 1], ...children, children[0]]);
+  }, [children])
 
   return (
     <>
