@@ -97,7 +97,7 @@ function Slide({ children }: Props) {
       </div>
       <button onClick={ prev }>Prev</button>
       <button onClick={ next }>Next</button>
-      <button onClick={ () => nextIndex(2) }>index 2</button>
+      <button onClick={ () => nextIndex(2) }>Next index 2</button>
     </>
   )
 }
