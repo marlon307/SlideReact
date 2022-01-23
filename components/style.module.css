@@ -10,7 +10,7 @@
   height: 100%;
   background: #33333323;
   transition-property: transform;
-  transition-timing-function: ease-in-out;
+  transition: all 0.3s ease 0s;
 }
 
 .panel {

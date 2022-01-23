@@ -75,7 +75,7 @@ function Slide({ children }: Props) {
     const firstChild = slideRef.current?.children[0].firstChild?.cloneNode(true)!;
     slideRef.current?.children[0].appendChild(firstChild);
     slideRef.current?.children[0].insertBefore(lastChild, slideRef.current?.children[0].firstChild);
-  }, []);
+  }, [children]);
 
   return (
     <>
