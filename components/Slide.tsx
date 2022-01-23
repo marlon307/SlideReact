@@ -17,7 +17,7 @@ function Slide({ children }: Props) {
   const [positonX, setPositionX] = useState(0);
   const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(1);
   const [panels, setPanels] = useState<ReactNode>();
 
   function prev() {
@@ -65,7 +65,12 @@ function Slide({ children }: Props) {
 
   useEffect(() => {
     setPanels([children[children.length - 1], ...children, children[0]]);
-  }, [children])
+  }, [children]);
+
+  useEffect(() => {
+    const initIndex = -slideRef.current?.children[0].children[index]?.clientWidth!;
+    setPositionX(initIndex);
+  }, [panels])
 
   return (
     <>
