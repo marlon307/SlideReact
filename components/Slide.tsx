@@ -13,18 +13,25 @@ type Props = {
 function Slide({ children }: Props) {
 
   const slideRef = createRef<HTMLDivElement>();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(1);
   const [startEv, setStartEv] = useState(false);
   const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0)
   const [positonX, setPositionX] = useState(0);
+  const [started, setStarted] = useState(false);
 
   function prev() {
+    let calcLeft = 0;
     setIndex(index - 1);
     const previndex = slideRef.current?.children[0].children[index - 1].clientWidth!;
-    const calcLeft = previndex + finishPosition;
+    if (!started) {
+      calcLeft = initpositinX + finishPosition
+    } else {
+      calcLeft = previndex + finishPosition;
+    }
     setPositionX(calcLeft);
     setFinishPosition(calcLeft);
+    setStarted(true);
   }
 
   function next() {
@@ -33,6 +40,7 @@ function Slide({ children }: Props) {
     const calcRight = -nextindex + positonX;
     setPositionX(calcRight);
     setFinishPosition(calcRight);
+    setStarted(true);
   }
 
   function nextIndex(nIndex: number) {
@@ -41,6 +49,7 @@ function Slide({ children }: Props) {
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
     setIndex(nIndex);
+    setStarted(true);
   }
 
   function finishEvent() {
@@ -71,11 +80,13 @@ function Slide({ children }: Props) {
   }, [startEv, slideRef, initpositinX, finishPosition]);
 
   useEffect(() => {
+    // nextIndex(1);
+    setPositionX(-slideRef.current?.children[0]?.clientWidth!);
     const lastChild = slideRef.current?.children[0].lastChild?.cloneNode(true)!;
     const firstChild = slideRef.current?.children[0].firstChild?.cloneNode(true)!;
     slideRef.current?.children[0].appendChild(firstChild);
     slideRef.current?.children[0].insertBefore(lastChild, slideRef.current?.children[0].firstChild);
-  }, []);
+  }, [children]);
 
   return (
     <>
@@ -89,7 +100,7 @@ function Slide({ children }: Props) {
           className={ style.slide }
           style={ {
             transform: `translateX(${positonX}px)`,
-            transition: `${startEv ? 'none' : '0.3s'}`
+            transition: `${startEv || !started ? 'none' : '0.3s'}`
           } }
         >
           { children }
