@@ -21,26 +21,11 @@ function Slide({ children }: Props) {
   const [started, setStarted] = useState(false);
 
   function prev() {
-    let calcLeft = 0;
-    setIndex(index - 1);
-    const previndex = slideRef.current?.children[0].children[index - 1].clientWidth!;
-    if (!started) {
-      calcLeft = initpositinX + finishPosition
-    } else {
-      calcLeft = previndex + finishPosition;
-    }
-    setPositionX(calcLeft);
-    setFinishPosition(calcLeft);
-    setStarted(true);
+    nextIndex(index - 1);
   }
 
   function next() {
-    setIndex(index + 1);
-    const nextindex = slideRef.current?.children[0].children[index].clientWidth!;
-    const calcRight = -nextindex + positonX;
-    setPositionX(calcRight);
-    setFinishPosition(calcRight);
-    setStarted(true);
+    nextIndex(index + 1);
   }
 
   function nextIndex(nIndex: number) {
@@ -80,7 +65,6 @@ function Slide({ children }: Props) {
   }, [startEv, slideRef, initpositinX, finishPosition]);
 
   useEffect(() => {
-    // nextIndex(1);
     setPositionX(-slideRef.current?.children[0]?.clientWidth!);
     const lastChild = slideRef.current?.children[0].lastChild?.cloneNode(true)!;
     const firstChild = slideRef.current?.children[0].firstChild?.cloneNode(true)!;
