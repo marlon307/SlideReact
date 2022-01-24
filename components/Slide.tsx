@@ -18,7 +18,6 @@ function Slide({ children }: Props) {
   const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0)
   const [positonX, setPositionX] = useState(0);
-  const [started, setStarted] = useState(false);
 
   function prev() {
     nextIndex(index - 1);
@@ -34,7 +33,6 @@ function Slide({ children }: Props) {
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
     setIndex(nIndex);
-    setStarted(true);
   }
 
   function finishEvent() {
@@ -81,10 +79,9 @@ function Slide({ children }: Props) {
         onMouseUp={ finishEvent }
       >
         <div
-          className={ style.slide }
+          className={ `${style.slide}  ${startEv && style.touch}` }
           style={ {
             transform: `translateX(${positonX}px)`,
-            transition: `${startEv || !started ? 'none' : '0.3s'}`
           } }
         >
           { children }
