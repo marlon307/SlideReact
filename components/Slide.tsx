@@ -18,12 +18,15 @@ function Slide({ children }: Props) {
   const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0)
   const [positonX, setPositionX] = useState(0);
+  const [started, setStarted] = useState(false);
 
   function prev() {
+    setStarted(true);
     nextIndex(index - 1);
   }
 
   function next() {
+    setStarted(true);
     nextIndex(index + 1);
   }
 
@@ -68,7 +71,15 @@ function Slide({ children }: Props) {
     const firstChild = slideRef.current?.children[0].firstChild?.cloneNode(true)!;
     slideRef.current?.children[0].appendChild(firstChild);
     slideRef.current?.children[0].insertBefore(lastChild, slideRef.current?.children[0].firstChild);
-  }, [children]);
+  }, []);
+
+  useEffect(() => {
+    // const getIndex = slideRef.current?.children[0].children.length! - 1;
+    if (index === 0) {
+      nextIndex(5)
+    }
+
+  }, [index])
 
   return (
     <>
@@ -79,7 +90,7 @@ function Slide({ children }: Props) {
         onMouseUp={ finishEvent }
       >
         <div
-          className={ `${style.slide}  ${startEv && style.touch}` }
+          className={ `${style.slide}  ${startEv || !started && style.stopanimation}` }
           style={ {
             transform: `translateX(${positonX}px)`,
           } }
