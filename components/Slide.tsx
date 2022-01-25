@@ -19,7 +19,6 @@ function Slide({ children }: Props) {
   const [initpositinX, setInitpositinX] = useState(0)
   const [positonX, setPositionX] = useState(0);
   const [started, setStarted] = useState(false);
-  const [allowShift, setAllowShift] = useState(true);
 
   function prev() {
     nextIndex(index - 1, true);
@@ -30,36 +29,14 @@ function Slide({ children }: Props) {
   }
 
   function nextIndex(nIndex: number, animate: boolean) {
-    setAllowShift(false);
-    const getElementWidth = slideRef.current?.children[0].children[nIndex].clientWidth!;
-    const calcnextIndex = -getElementWidth * nIndex;
+    const getElementWidth = slideRef.current?.children[0].children[nIndex]!;
+    if (getElementWidth === undefined) return;
+    const calcnextIndex = -getElementWidth.clientWidth * nIndex;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
     setStarted(animate);
     setIndex(nIndex);
   }
-
-  useEffect(() => {
-    const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
-    if (!allowShift) {
-      if (index === 0) {
-        nextIndex(getMaxIndex, false);
-      }
-      if (index === getMaxIndex) {
-        nextIndex(1, false);
-      }
-    }
-    setAllowShift(true);
-  }, [allowShift]);
-
-  useEffect(() => {
-    const getElement = slideRef.current?.children[0];
-    setPositionX(-getElement?.clientWidth!);
-    const lastChild = getElement?.lastChild?.cloneNode(true)!;
-    const firstChild = getElement?.firstChild?.cloneNode(true)!;
-    getElement?.appendChild(firstChild);
-    getElement?.insertBefore(lastChild, getElement.firstChild);
-  }, []);
 
   function finishEvent() {
     setStartEv(false);
@@ -71,6 +48,34 @@ function Slide({ children }: Props) {
     setStartEv(true);
     setInitpositinX(event.nativeEvent.offsetX);
   }
+
+  useEffect(() => {
+    const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
+    const { current } = slideRef;
+
+    function checkIndex() {
+      if (index === 0) {
+        nextIndex(getMaxIndex - 1, false);
+      }
+      if (index === getMaxIndex) {
+        nextIndex(1, false);
+      }
+    }
+
+    current?.addEventListener('transitionend', checkIndex);
+    return () => {
+      current?.removeEventListener('transitionend', checkIndex);
+    }
+  }, [index])
+
+  useEffect(() => {
+    const getElement = slideRef.current?.children[0];
+    setPositionX(-getElement?.clientWidth!);
+    const lastChild = getElement?.lastChild?.cloneNode(true)!;
+    const firstChild = getElement?.firstChild?.cloneNode(true)!;
+    getElement?.appendChild(firstChild);
+    getElement?.insertBefore(lastChild, getElement.firstChild);
+  }, []);
 
   useEffect(() => {
     const { current } = slideRef;
