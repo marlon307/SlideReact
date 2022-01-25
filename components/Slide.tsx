@@ -17,30 +17,30 @@ function Slide({ children }: Props) {
   const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0)
   const [positonX, setPositionX] = useState(0);
-  const [started, setStarted] = useState(false);
 
   function prev() {
-    nextIndex(index - 1, true);
+    nextIndex(index - 1);
   }
 
   function next() {
-    nextIndex(index + 1, true);
+    nextIndex(index + 1);
   }
 
-  function nextIndex(nIndex: number, animate: boolean) {
+  function nextIndex(nIndex: number) {
     const getElementWidth = slideRef.current?.children[0].children[nIndex]!;
     if (getElementWidth === undefined) return;
     const calcnextIndex = -getElementWidth.clientWidth * nIndex;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
-    setStarted(animate);
     setIndex(nIndex);
   }
 
   function finishEvent() {
+    if (startEv) {
+      if (positonX > finishPosition) prev();
+      else next();
+    }
     setStartEv(false);
-    if (positonX > finishPosition) prev();
-    else next();
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
@@ -49,15 +49,15 @@ function Slide({ children }: Props) {
   }
 
   useEffect(() => {
-    const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
     const { current } = slideRef;
+    const getMaxIndex = current?.children[0].children.length! - 1;
 
     function checkIndex() {
       if (index === 0) {
-        nextIndex(getMaxIndex - 1, false);
+        nextIndex(getMaxIndex - 1);
       }
       if (index === getMaxIndex) {
-        nextIndex(1, false);
+        nextIndex(1);
       }
     }
 
@@ -68,29 +68,35 @@ function Slide({ children }: Props) {
   }, [index]);
 
   useEffect(() => {
-    const getElement = slideRef.current?.children[0];
-    setPositionX(-getElement?.clientWidth!);
-    const lastChild = getElement?.lastChild?.cloneNode(true)!;
-    const firstChild = getElement?.firstChild?.cloneNode(true)!;
-    getElement?.appendChild(firstChild);
-    getElement?.insertBefore(lastChild, getElement.firstChild);
-  }, []);
-
-  useEffect(() => {
     const { current } = slideRef;
 
     const eventMouseMove = (event: any) => {
+      current?.children[0].classList.remove(style.stopanimation)
       const positionReset = event.layerX - initpositinX;
       setPositionX(finishPosition + positionReset);
     }
 
-    if (startEv) current?.addEventListener('mousemove', eventMouseMove);
+    if (startEv) {
+      current?.children[0].classList.add(style.stopanimation)
+      current?.addEventListener('mousemove', eventMouseMove);
+    }
     else current?.removeEventListener('mousemove', eventMouseMove);
 
     return () => {
       current?.removeEventListener('mousemove', eventMouseMove);
+      current?.removeEventListener('mouseleave', finishEvent);
     }
   }, [startEv, slideRef, initpositinX, finishPosition]);
+
+  useEffect(() => {
+    const getElement = slideRef.current?.children[0];
+    const lastChild = getElement?.lastChild?.cloneNode(true)!;
+    const firstChild = getElement?.firstChild?.cloneNode(true)!;
+    getElement?.appendChild(firstChild);
+    getElement?.insertBefore(lastChild, getElement.firstChild);
+    setPositionX(-getElement?.clientWidth!);
+    setFinishPosition(-getElement?.clientWidth!)
+  }, []);
 
   return (
     <>
@@ -99,9 +105,10 @@ function Slide({ children }: Props) {
         className={ style.movePanel }
         onMouseDown={ starEvent }
         onMouseUp={ finishEvent }
+        onMouseLeave={ finishEvent }
       >
         <div
-          className={ `${style.slide}  ${startEv || !started && style.stopanimation}` }
+          className={ `${style.slide}  ${startEv && style.stopanimation}` }
           style={ {
             transform: `translate3D(${positonX}px, 0, 0)`,
           } }
@@ -111,7 +118,7 @@ function Slide({ children }: Props) {
       </div>
       <button onClick={ prev }>Prev</button>
       <button onClick={ next }>Next</button>
-      <button onClick={ () => nextIndex(2, true) }>Next index 2</button>
+      <button onClick={ () => nextIndex(2) }>Next index 2</button>
     </>
   )
 }
