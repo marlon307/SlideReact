@@ -36,10 +36,12 @@ function Slide({ children }: Props) {
   }
 
   function finishEvent() {
+    const { current } = slideRef;
     if (startEv) {
       if (positonX > finishPosition) prev();
       else next();
     }
+    current?.classList.remove(style.stopanimation);
     setStartEv(false);
   }
 
@@ -77,7 +79,7 @@ function Slide({ children }: Props) {
     }
 
     if (startEv) {
-      current?.children[0].classList.add(style.stopanimation)
+      current?.classList.add(style.stopanimation);
       current?.addEventListener('mousemove', eventMouseMove);
     }
     else current?.removeEventListener('mousemove', eventMouseMove);
@@ -108,7 +110,7 @@ function Slide({ children }: Props) {
         onMouseLeave={ finishEvent }
       >
         <div
-          className={ `${style.slide}  ${startEv && style.stopanimation}` }
+          className={ style.slide }
           style={ {
             transform: `translate3D(${positonX}px, 0, 0)`,
           } }
