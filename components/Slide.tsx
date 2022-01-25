@@ -19,24 +19,47 @@ function Slide({ children }: Props) {
   const [initpositinX, setInitpositinX] = useState(0)
   const [positonX, setPositionX] = useState(0);
   const [started, setStarted] = useState(false);
+  const [allowShift, setAllowShift] = useState(true);
 
   function prev() {
-    setStarted(true);
-    nextIndex(index - 1);
+    nextIndex(index - 1, true);
   }
 
   function next() {
-    setStarted(true);
-    nextIndex(index + 1);
+    nextIndex(index + 1, true);
   }
 
-  function nextIndex(nIndex: number) {
-    const nextindex = slideRef.current?.children[0].children[nIndex].clientWidth!;
-    const calcnextIndex = -nextindex * nIndex;
+  function nextIndex(nIndex: number, animate: boolean) {
+    setAllowShift(false);
+    const getElementWidth = slideRef.current?.children[0].children[nIndex].clientWidth!;
+    const calcnextIndex = -getElementWidth * nIndex;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
+    setStarted(animate);
     setIndex(nIndex);
   }
+
+  useEffect(() => {
+    const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
+    if (!allowShift) {
+      if (index === 0) {
+        nextIndex(getMaxIndex, false);
+      }
+      if (index === getMaxIndex) {
+        nextIndex(1, false);
+      }
+    }
+    setAllowShift(true);
+  }, [allowShift]);
+
+  useEffect(() => {
+    const getElement = slideRef.current?.children[0];
+    setPositionX(-getElement?.clientWidth!);
+    const lastChild = getElement?.lastChild?.cloneNode(true)!;
+    const firstChild = getElement?.firstChild?.cloneNode(true)!;
+    getElement?.appendChild(firstChild);
+    getElement?.insertBefore(lastChild, getElement.firstChild);
+  }, []);
 
   function finishEvent() {
     setStartEv(false);
@@ -65,22 +88,6 @@ function Slide({ children }: Props) {
     }
   }, [startEv, slideRef, initpositinX, finishPosition]);
 
-  useEffect(() => {
-    setPositionX(-slideRef.current?.children[0]?.clientWidth!);
-    const lastChild = slideRef.current?.children[0].lastChild?.cloneNode(true)!;
-    const firstChild = slideRef.current?.children[0].firstChild?.cloneNode(true)!;
-    slideRef.current?.children[0].appendChild(firstChild);
-    slideRef.current?.children[0].insertBefore(lastChild, slideRef.current?.children[0].firstChild);
-  }, []);
-
-  useEffect(() => {
-    // const getIndex = slideRef.current?.children[0].children.length! - 1;
-    if (index === 0) {
-      nextIndex(5)
-    }
-
-  }, [index])
-
   return (
     <>
       <div
@@ -100,7 +107,7 @@ function Slide({ children }: Props) {
       </div>
       <button onClick={ prev }>Prev</button>
       <button onClick={ next }>Next</button>
-      <button onClick={ () => nextIndex(2) }>Next index 2</button>
+      <button onClick={ () => nextIndex(2, true) }>Next index 2</button>
     </>
   )
 }
