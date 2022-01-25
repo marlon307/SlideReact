@@ -38,9 +38,11 @@ function Slide({ children }: Props) {
   }
 
   function finishEvent() {
+    if (startEv) {
+      if (positonX > finishPosition) prev();
+      else next();
+    }
     setStartEv(false);
-    if (positonX > finishPosition) prev();
-    else next();
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
@@ -49,8 +51,8 @@ function Slide({ children }: Props) {
   }
 
   useEffect(() => {
-    const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
     const { current } = slideRef;
+    const getMaxIndex = current?.children[0].children.length! - 1;
 
     function checkIndex() {
       if (index === 0) {
@@ -89,6 +91,7 @@ function Slide({ children }: Props) {
 
     return () => {
       current?.removeEventListener('mousemove', eventMouseMove);
+      current?.removeEventListener('mouseleave', finishEvent);
     }
   }, [startEv, slideRef, initpositinX, finishPosition]);
 
@@ -99,6 +102,7 @@ function Slide({ children }: Props) {
         className={ style.movePanel }
         onMouseDown={ starEvent }
         onMouseUp={ finishEvent }
+        onMouseLeave={ finishEvent }
       >
         <div
           className={ `${style.slide}  ${startEv || !started && style.stopanimation}` }
