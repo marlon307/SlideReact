@@ -38,12 +38,22 @@ function Slide({ children }: Props) {
     setIndex(nIndex);
   }
 
+  function finishEvent() {
+    setStartEv(false);
+    if (positonX > finishPosition) prev();
+    else next();
+  }
+
+  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
+    setStartEv(true);
+    setInitpositinX(event.nativeEvent.offsetX);
+  }
+
   useEffect(() => {
     const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
     const { current } = slideRef;
 
     function checkIndex() {
-
       if (index === 0) {
         nextIndex(getMaxIndex - 1, false);
       }
@@ -66,17 +76,6 @@ function Slide({ children }: Props) {
     getElement?.appendChild(firstChild);
     getElement?.insertBefore(lastChild, getElement.firstChild);
   }, []);
-
-  function finishEvent() {
-    setStartEv(false);
-    if (positonX > finishPosition) prev();
-    else next();
-  }
-
-  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
-    setStartEv(true);
-    setInitpositinX(event.nativeEvent.offsetX);
-  }
 
   useEffect(() => {
     const { current } = slideRef;
