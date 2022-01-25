@@ -35,9 +35,31 @@ function Slide({ children }: Props) {
     const calcnextIndex = -getElementWidth * nIndex;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
-    setIndex(nIndex);
     setStarted(animate);
+    setIndex(nIndex);
   }
+
+  useEffect(() => {
+    const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
+    if (!allowShift) {
+      if (index === 0) {
+        nextIndex(getMaxIndex, false);
+      }
+      if (index === getMaxIndex) {
+        nextIndex(1, false);
+      }
+    }
+    setAllowShift(true);
+  }, [allowShift]);
+
+  useEffect(() => {
+    const getElement = slideRef.current?.children[0];
+    setPositionX(-getElement?.clientWidth!);
+    const lastChild = getElement?.lastChild?.cloneNode(true)!;
+    const firstChild = getElement?.firstChild?.cloneNode(true)!;
+    getElement?.appendChild(firstChild);
+    getElement?.insertBefore(lastChild, getElement.firstChild);
+  }, []);
 
   function finishEvent() {
     setStartEv(false);
@@ -49,15 +71,6 @@ function Slide({ children }: Props) {
     setStartEv(true);
     setInitpositinX(event.nativeEvent.offsetX);
   }
-
-  useEffect(() => {
-    const getElement = slideRef.current?.children[0];
-    setPositionX(-getElement?.clientWidth!);
-    const lastChild = getElement?.lastChild?.cloneNode(true)!;
-    const firstChild = getElement?.firstChild?.cloneNode(true)!;
-    getElement?.appendChild(firstChild);
-    getElement?.insertBefore(lastChild, getElement.firstChild);
-  }, []);
 
   useEffect(() => {
     const { current } = slideRef;
@@ -74,19 +87,6 @@ function Slide({ children }: Props) {
       current?.removeEventListener('mousemove', eventMouseMove);
     }
   }, [startEv, slideRef, initpositinX, finishPosition]);
-
-  useEffect(() => {
-    const getMaxIndex = slideRef.current?.children[0].children.length! - 1;
-    if (!allowShift) {
-      if (index === 0) {
-        nextIndex(getMaxIndex, false);
-      }
-      if (index === getMaxIndex) {
-        nextIndex(1, false);
-      }
-    }
-    setAllowShift(true);
-  }, [allowShift])
 
   return (
     <>
