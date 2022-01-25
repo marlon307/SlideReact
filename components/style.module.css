@@ -13,12 +13,12 @@
   transition: transform 0.3s ease-out;
 }
 
+.stopanimation .slide {
+  transition: none;
+}
+
 .panel {
   flex: none;
   width: 100%;
   background: #ffc40063;
-}
-
-.stopanimation {
-  transition: none;
 }
