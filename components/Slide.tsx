@@ -7,11 +7,10 @@ import React, {
 import style from './style.module.css';
 
 type Props = {
-  children: any;
+  children: ReactNode;
 }
 
 function Slide({ children }: Props) {
-
   const slideRef = createRef<HTMLDivElement>();
   const [index, setIndex] = useState(1);
   const [startEv, setStartEv] = useState(false);
@@ -66,7 +65,7 @@ function Slide({ children }: Props) {
     return () => {
       current?.removeEventListener('transitionend', checkIndex);
     }
-  }, [index])
+  }, [index]);
 
   useEffect(() => {
     const getElement = slideRef.current?.children[0];
@@ -104,7 +103,7 @@ function Slide({ children }: Props) {
         <div
           className={ `${style.slide}  ${startEv || !started && style.stopanimation}` }
           style={ {
-            transform: `translateX(${positonX}px)`,
+            transform: `translate3D(${positonX}px, 0, 0)`,
           } }
         >
           { children }
