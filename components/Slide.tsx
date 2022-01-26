@@ -41,7 +41,6 @@ function Slide({ children }: Props) {
       if (positonX > finishPosition) prev();
       else next();
     }
-    slideRef?.current?.classList.remove(style.stopanimation);
     setStartEv(false);
   }
 
@@ -65,6 +64,7 @@ function Slide({ children }: Props) {
       }
     }
 
+    current?.classList.remove(style.stopanimation);
     current?.addEventListener('transitionend', checkIndex);
     return () => {
       current?.removeEventListener('transitionend', checkIndex);
@@ -128,4 +128,4 @@ function Slide({ children }: Props) {
   )
 }
 
-export default Slide
+export default Slide;
