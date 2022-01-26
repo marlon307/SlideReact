@@ -20,12 +20,10 @@ function Slide({ children }: Props) {
   const [finishTransition, setFinishTransition] = useState(false);
 
   function prev() {
-    setFinishTransition(true);
     nextIndex(index - 1);
   }
 
   function next() {
-    setFinishTransition(true);
     nextIndex(index + 1);
   }
 
@@ -44,7 +42,6 @@ function Slide({ children }: Props) {
       if (positonX > finishPosition) prev();
       else next();
       setStartEv(false);
-      setFinishTransition(true);
     }
   }
 
