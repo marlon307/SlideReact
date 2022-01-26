@@ -40,13 +40,15 @@ function Slide({ children }: Props) {
     if (startEv) {
       if (positonX > finishPosition) prev();
       else next();
+      setStartEv(false);
     }
-    setStartEv(false);
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
-    setStartEv(true);
-    setInitpositinX(event.nativeEvent.offsetX);
+    if(!startEv){
+      setInitpositinX(event.nativeEvent.offsetX);
+      setStartEv(true);
+    }
   }
 
   useEffect(() => {
@@ -109,7 +111,7 @@ function Slide({ children }: Props) {
         ref={ slideRef }
         className={ style.movePanel }
         onMouseDown={ starEvent }
-        onMouseUp={ finishEvent }
+        onMouseUp={  finishEvent }
         onMouseLeave={ finishEvent }
       >
         <div
