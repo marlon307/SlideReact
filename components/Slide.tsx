@@ -43,7 +43,7 @@ function Slide({ children }: Props) {
       if (positonX > finishPosition) prev();
       else next();
       setStartEv(false);
-      setFinishTransition(true);
+      // setFinishTransition(true);
     }
   }
 
@@ -89,6 +89,7 @@ function Slide({ children }: Props) {
     if (startEv) {
       current?.classList.add(style.stopanimation);
       current?.addEventListener('mousemove', eventMouseMove);
+      setFinishTransition(false);
     }
     else current?.removeEventListener('mousemove', eventMouseMove);
 
