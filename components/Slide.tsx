@@ -33,15 +33,15 @@ function Slide({ children }: Props) {
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
     setIndex(nIndex);
+    slideRef?.current?.classList.remove(style.stopanimation);
   }
 
   function finishEvent() {
-    const { current } = slideRef;
     if (startEv) {
       if (positonX > finishPosition) prev();
       else next();
     }
-    current?.classList.remove(style.stopanimation);
+    slideRef?.current?.classList.remove(style.stopanimation);
     setStartEv(false);
   }
 
@@ -56,9 +56,11 @@ function Slide({ children }: Props) {
 
     function checkIndex() {
       if (index === 0) {
+        current?.classList.add(style.stopanimation);
         nextIndex(getMaxIndex - 1);
       }
       if (index === getMaxIndex) {
+        current?.classList.add(style.stopanimation);
         nextIndex(1);
       }
     }
@@ -92,6 +94,7 @@ function Slide({ children }: Props) {
 
   useEffect(() => {
     const getElement = slideRef.current?.children[0];
+    slideRef?.current?.classList.add(style.stopanimation);
     const lastChild = getElement?.lastChild?.cloneNode(true)!;
     const firstChild = getElement?.firstChild?.cloneNode(true)!;
     getElement?.appendChild(firstChild);
