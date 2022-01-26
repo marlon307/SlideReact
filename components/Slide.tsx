@@ -20,16 +20,15 @@ function Slide({ children }: Props) {
   const [finishTransition, setFinishTransition] = useState(false);
 
   function prev() {
-    setFinishTransition(true);
     nextIndex(index - 1);
   }
 
   function next() {
-    setFinishTransition(true);
     nextIndex(index + 1);
   }
 
   function nextIndex(nIndex: number) {
+    setFinishTransition(true);
     const getElementWidth = slideRef.current?.children[0].children[nIndex]!;
     if (getElementWidth === undefined) return;
     const calcnextIndex = -getElementWidth.clientWidth * nIndex;
@@ -44,6 +43,7 @@ function Slide({ children }: Props) {
       if (positonX > finishPosition) prev();
       else next();
       setStartEv(false);
+      setFinishTransition(true);
     }
   }
 
