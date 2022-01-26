@@ -17,12 +17,15 @@ function Slide({ children }: Props) {
   const [finishPosition, setFinishPosition] = useState(0);
   const [initpositinX, setInitpositinX] = useState(0)
   const [positonX, setPositionX] = useState(0);
+  const [finishTransition, setFinishTransition] = useState(false);
 
   function prev() {
+    setFinishTransition(true);
     nextIndex(index - 1);
   }
 
   function next() {
+    setFinishTransition(true);
     nextIndex(index + 1);
   }
 
@@ -45,9 +48,10 @@ function Slide({ children }: Props) {
   }
 
   function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
-    if(!startEv){
+    if (!startEv && !finishTransition) {
       setInitpositinX(event.nativeEvent.offsetX);
       setStartEv(true);
+      setFinishTransition(true);
     }
   }
 
@@ -64,9 +68,9 @@ function Slide({ children }: Props) {
         current?.classList.add(style.stopanimation);
         nextIndex(1);
       }
+      setFinishTransition(false);
     }
 
-    current?.classList.remove(style.stopanimation);
     current?.addEventListener('transitionend', checkIndex);
     return () => {
       current?.removeEventListener('transitionend', checkIndex);
@@ -111,7 +115,7 @@ function Slide({ children }: Props) {
         ref={ slideRef }
         className={ style.movePanel }
         onMouseDown={ starEvent }
-        onMouseUp={  finishEvent }
+        onMouseUp={ finishEvent }
         onMouseLeave={ finishEvent }
       >
         <div
