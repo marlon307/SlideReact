@@ -43,7 +43,7 @@ function Slide({ children }: Props) {
       if (positonX > finishPosition) prev();
       else next();
       setStartEv(false);
-      // setFinishTransition(true);
+      slideRef?.current?.classList.remove(style.stopanimation);
     }
   }
 
