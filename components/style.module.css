@@ -1,6 +1,8 @@
 .movePanel {
   overflow: hidden;
   user-select: none;
+  width: 100%;
+  height: 100%;
 }
 
 .slide {
@@ -12,7 +14,6 @@
   width: 100%;
   height: 100%;
   user-select: none;
-  background: #33333323;
   transition: transform 0.3s ease-out;
 }
 
@@ -23,5 +24,6 @@
 .panel {
   flex: none;
   width: 100%;
+  height: 100%;
   user-select: none;
 }
