@@ -28,7 +28,7 @@ function Slide({ children }: Props) {
   }
 
   function nextIndex(nIndex: number) {
-    setFinishTransition(true);
+    index !== nIndex && setFinishTransition(true);
     const getElementWidth = slideRef.current?.children[0].children[nIndex]!;
     if (getElementWidth === undefined) return;
     const calcnextIndex = -getElementWidth.clientWidth * nIndex;
@@ -88,7 +88,6 @@ function Slide({ children }: Props) {
     if (startEv) {
       current?.classList.add(style.stopanimation);
       current?.addEventListener('mousemove', eventMouseMove);
-      setFinishTransition(false);
     }
     else current?.removeEventListener('mousemove', eventMouseMove);
 
