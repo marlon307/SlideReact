@@ -40,10 +40,9 @@ function Slide({ children }: Props) {
 
   function finishEvent() {
     if (startEv) {
-      if (positonX > finishPosition) prev();
-      else next();
-      setStartEv(false);
+      positonX > finishPosition ? prev() : next();
       slideRef?.current?.classList.remove(style.stopanimation);
+      setStartEv(false);
     }
   }
 
@@ -107,7 +106,7 @@ function Slide({ children }: Props) {
     getElement?.appendChild(firstChild);
     getElement?.insertBefore(lastChild, getElement.firstChild);
     setPositionX(-getElement?.clientWidth!);
-    setFinishPosition(-getElement?.clientWidth!)
+    setFinishPosition(-getElement?.clientWidth!);
   }, []);
 
   return (
