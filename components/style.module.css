@@ -23,6 +23,7 @@
 }
 
 .stopanimation .slide {
+  transition-duration: 0ms;
   transition: none;
 }
 

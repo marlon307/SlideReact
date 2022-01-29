@@ -113,6 +113,7 @@ function Slide({ children }: Props) {
   useEffect(() => {
     const getElementWidth = slideRef.current?.children[0].children[index]!;
     if (getElementWidth === undefined) return;
+    slideRef.current?.classList.add(style.stopanimation);
     const calcnextIndex = -getElementWidth.clientWidth * index;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
