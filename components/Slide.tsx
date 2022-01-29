@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
 } from 'react'
+import useWindowSize from '../hooks/useWindowSize';
 import style from './style.module.css';
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 }
 
 function Slide({ children }: Props) {
+  const windowSize = useWindowSize();
   const slideRef = createRef<HTMLDivElement>();
   const [index, setIndex] = useState(1);
   const [startEv, setStartEv] = useState(false);
@@ -107,6 +109,14 @@ function Slide({ children }: Props) {
     setPositionX(-getElement?.clientWidth!);
     setFinishPosition(-getElement?.clientWidth!);
   }, []);
+
+  useEffect(() => {
+    const getElementWidth = slideRef.current?.children[0].children[index]!;
+    if (getElementWidth === undefined) return;
+    const calcnextIndex = -getElementWidth.clientWidth * index;
+    setPositionX(calcnextIndex);
+    setFinishPosition(calcnextIndex);
+  }, [windowSize]);
 
   return (
     <>
