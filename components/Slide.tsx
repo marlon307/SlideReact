@@ -20,15 +20,7 @@ function Slide({ children, refCarousel }: Props) {
   const [positonX, setPositionX] = useState(0);
   const [finishTransition, setFinishTransition] = useState(false);
 
-  function prev() {
-    nextIndex(index - 1);
-  }
-
-  function next() {
-    nextIndex(index + 1);
-  }
-
-  function nextIndex(nIndex: number) {
+  function nextIndex(nIndex: number, animate: boolean) {
     index !== nIndex && setFinishTransition(true);
     const getElementWidth = refCarousel.current?.children[0].children[nIndex]!;
     if (getElementWidth === undefined) return;
@@ -36,12 +28,12 @@ function Slide({ children, refCarousel }: Props) {
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
     setIndex(nIndex);
+    animate && refCarousel?.current?.classList.remove(style.stopanimation);
   }
 
   function finishEvent() {
     if (startEv) {
-      positonX > finishPosition ? nextIndex(index - 1) : nextIndex(index + 1);
-      refCarousel?.current?.classList.remove(style.stopanimation);
+      positonX > finishPosition ? nextIndex(index - 1, true) : nextIndex(index + 1, true);
       setStartEv(false);
     }
   }
@@ -61,11 +53,11 @@ function Slide({ children, refCarousel }: Props) {
     function checkIndex() {
       if (index === 0) {
         current?.classList.add(style.stopanimation);
-        nextIndex(getMaxIndex - 1);
+        nextIndex(getMaxIndex - 1, false);
       }
       if (index === getMaxIndex) {
         current?.classList.add(style.stopanimation);
-        nextIndex(1);
+        nextIndex(1, false);
       }
       setFinishTransition(false);
     }
@@ -98,7 +90,6 @@ function Slide({ children, refCarousel }: Props) {
 
   useEffect(() => {
     const getElement = refCarousel.current?.children[0];
-    refCarousel?.current?.classList.add(style.stopanimation);
     const lastChild = getElement?.lastChild?.cloneNode(true)!;
     const firstChild = getElement?.firstChild?.cloneNode(true)!;
     getElement?.appendChild(firstChild);
@@ -107,7 +98,6 @@ function Slide({ children, refCarousel }: Props) {
     setFinishPosition(-getElement?.clientWidth!);
   }, []);
 
-
   useEffect(() => {
     refCarousel.current?.classList.add(style.stopanimation);
     const getElementWidth = refCarousel.current?.children[0].children[index]!;
@@ -115,7 +105,7 @@ function Slide({ children, refCarousel }: Props) {
     const calcnextIndex = -getElementWidth.clientWidth * index;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
-  }, [resizeWindow]);
+  }, [resizeWindow[0]]);
 
   return (
     <>
@@ -135,9 +125,9 @@ function Slide({ children, refCarousel }: Props) {
           { children }
         </div>
       </div>
-      <button onClick={ prev }>Prev</button>
-      <button onClick={ next }>Next</button>
-      <button onClick={ () => nextIndex(2) }>Next index 2</button>
+      <button onClick={ () => nextIndex(index - 1, true) }>Prev</button>
+      <button onClick={ () => nextIndex(index + 1, true) }>Next</button>
+      <button onClick={ () => nextIndex(2, true) }>Next index 2</button>
     </>
   )
 }
