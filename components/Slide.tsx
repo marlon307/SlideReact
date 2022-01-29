@@ -1,19 +1,18 @@
 import React, {
   ReactNode,
-  createRef,
   useState,
   useEffect,
-} from 'react'
-import useWindowSize from '../hooks/useWindowSize';
+} from 'react';
+import windowSize from '../hooks/useWindowSize';
 import style from './style.module.css';
 
 type Props = {
   children: ReactNode;
+  refCarousel: { current: HTMLDivElement | null }
 }
 
-function Slide({ children }: Props) {
-  const windowSize = useWindowSize();
-  const slideRef = createRef<HTMLDivElement>();
+function Slide({ children, refCarousel }: Props) {
+  const resizeWindow = windowSize();
   const [index, setIndex] = useState(1);
   const [startEv, setStartEv] = useState(false);
   const [finishPosition, setFinishPosition] = useState(0);
@@ -21,29 +20,20 @@ function Slide({ children }: Props) {
   const [positonX, setPositionX] = useState(0);
   const [finishTransition, setFinishTransition] = useState(false);
 
-  function prev() {
-    nextIndex(index - 1);
-  }
-
-  function next() {
-    nextIndex(index + 1);
-  }
-
-  function nextIndex(nIndex: number) {
+  function nextIndex(nIndex: number, animate: boolean) {
     index !== nIndex && setFinishTransition(true);
-    const getElementWidth = slideRef.current?.children[0].children[nIndex]!;
+    const getElementWidth = refCarousel.current?.children[0].children[nIndex]!;
     if (getElementWidth === undefined) return;
     const calcnextIndex = -getElementWidth.clientWidth * nIndex;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
     setIndex(nIndex);
-    slideRef?.current?.classList.remove(style.stopanimation);
+    animate && refCarousel?.current?.classList.remove(style.stopanimation);
   }
 
   function finishEvent() {
     if (startEv) {
-      positonX > finishPosition ? prev() : next();
-      slideRef?.current?.classList.remove(style.stopanimation);
+      positonX > finishPosition ? nextIndex(index - 1, true) : nextIndex(index + 1, true);
       setStartEv(false);
     }
   }
@@ -57,17 +47,17 @@ function Slide({ children }: Props) {
   }
 
   useEffect(() => {
-    const { current } = slideRef;
+    const { current } = refCarousel;
     const getMaxIndex = current?.children[0].children.length! - 1;
 
     function checkIndex() {
       if (index === 0) {
         current?.classList.add(style.stopanimation);
-        nextIndex(getMaxIndex - 1);
+        nextIndex(getMaxIndex - 1, false);
       }
       if (index === getMaxIndex) {
         current?.classList.add(style.stopanimation);
-        nextIndex(1);
+        nextIndex(1, false);
       }
       setFinishTransition(false);
     }
@@ -79,10 +69,9 @@ function Slide({ children }: Props) {
   }, [index]);
 
   useEffect(() => {
-    const { current } = slideRef;
+    const { current } = refCarousel;
 
     const eventMouseMove = (event: any) => {
-      current?.children[0].classList.remove(style.stopanimation)
       const positionReset = event.layerX - initpositinX;
       setPositionX(finishPosition + positionReset);
     }
@@ -97,11 +86,10 @@ function Slide({ children }: Props) {
       current?.removeEventListener('mousemove', eventMouseMove);
       current?.removeEventListener('mouseleave', finishEvent);
     }
-  }, [startEv, slideRef, initpositinX, finishPosition]);
+  }, [startEv, refCarousel, initpositinX, finishPosition]);
 
   useEffect(() => {
-    const getElement = slideRef.current?.children[0];
-    slideRef?.current?.classList.add(style.stopanimation);
+    const getElement = refCarousel.current?.children[0];
     const lastChild = getElement?.lastChild?.cloneNode(true)!;
     const firstChild = getElement?.firstChild?.cloneNode(true)!;
     getElement?.appendChild(firstChild);
@@ -111,18 +99,18 @@ function Slide({ children }: Props) {
   }, []);
 
   useEffect(() => {
-    const getElementWidth = slideRef.current?.children[0].children[index]!;
+    refCarousel.current?.classList.add(style.stopanimation);
+    const getElementWidth = refCarousel.current?.children[0].children[index]!;
     if (getElementWidth === undefined) return;
-    slideRef.current?.classList.add(style.stopanimation);
     const calcnextIndex = -getElementWidth.clientWidth * index;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
-  }, [windowSize]);
+  }, [resizeWindow[0]]);
 
   return (
     <>
       <div
-        ref={ slideRef }
+        ref={ refCarousel }
         className={ style.movePanel }
         onMouseDown={ starEvent }
         onMouseUp={ finishEvent }
@@ -137,9 +125,9 @@ function Slide({ children }: Props) {
           { children }
         </div>
       </div>
-      <button onClick={ prev }>Prev</button>
-      <button onClick={ next }>Next</button>
-      <button onClick={ () => nextIndex(2) }>Next index 2</button>
+      <button onClick={ () => nextIndex(index - 1, true) }>Prev</button>
+      <button onClick={ () => nextIndex(index + 1, true) }>Next</button>
+      <button onClick={ () => nextIndex(2, true) }>Next index 2</button>
     </>
   )
 }

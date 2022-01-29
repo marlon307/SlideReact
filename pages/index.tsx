@@ -1,12 +1,15 @@
-import type { NextPage } from 'next'
-import Slide from '../components/Slide'
-import SPanel from '../components/SPanel'
-import styles from '../styles/Home.module.css'
+import React, { createRef } from 'react';
+import type { NextPage } from 'next';
+import Slide from '../components/Slide';
+import SPanel from '../components/SPanel';
+import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
+  const refCarousel = createRef<HTMLDivElement>()!;
+
   return (
     <div className={ styles.container }>
-      <Slide>
+      <Slide refCarousel={ refCarousel }>
         <SPanel>
           <div className={ styles.content }>
             Panel 1
@@ -33,6 +36,9 @@ const Home: NextPage = () => {
           </div>
         </SPanel>
       </Slide>
+      {/* <button onClick={ refCarousel.current.prev }>Prev</button>
+      <button onClick={ refCarousel.current.next }>Next</button>
+      <button onClick={ () => refCarousel.current.nextIndex(2) }>Next index 2</button> */}
     </div>
   )
 }
