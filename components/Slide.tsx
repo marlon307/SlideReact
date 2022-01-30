@@ -38,7 +38,7 @@ function Slide({ children, refCarousel }: Props) {
     }
   }
 
-  function starEvent(event: { nativeEvent: { offsetX: React.SetStateAction<number>; }; }) {
+  function starEvent(event: React.MouseEvent) {
     if (!startEv && !finishTransition) {
       setInitpositinX(event.nativeEvent.offsetX);
       setStartEv(true);
