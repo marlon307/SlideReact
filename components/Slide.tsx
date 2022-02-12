@@ -11,30 +11,32 @@ type Props = {
   children: ReactNode;
 }
 
-function Slide({ children }: Props) {
+const Slide = function Slide({ children }: Props) {
   const refCarousel = createRef<HTMLDivElement>();
   const resizeWindow = windowSize();
   const [index, setIndex] = useState(1);
   const [startEv, setStartEv] = useState(false);
   const [finishPosition, setFinishPosition] = useState(0);
-  const [initpositinX, setInitpositinX] = useState(0)
+  const [initpositinX, setInitpositinX] = useState(0);
   const [positonX, setPositionX] = useState(0);
   const [finishTransition, setFinishTransition] = useState(false);
 
   function nextIndex(nIndex: number, animate: boolean) {
-    index !== nIndex && setFinishTransition(true);
+    if (index !== nIndex) setFinishTransition(true);
     const getElementWidth = refCarousel.current?.children[0].children[nIndex]!;
     if (getElementWidth === undefined) return;
     const calcnextIndex = -getElementWidth.clientWidth * nIndex;
     setPositionX(calcnextIndex);
     setFinishPosition(calcnextIndex);
     setIndex(nIndex);
-    animate && refCarousel?.current?.classList.remove(style.stopanimation);
+    if (animate) refCarousel.current!.classList.remove(style.stopanimation);
   }
 
   function finishEvent() {
     if (startEv) {
-      positonX > finishPosition ? nextIndex(index - 1, true) : nextIndex(index + 1, true);
+      if (positonX > finishPosition) nextIndex(index - 1, true);
+      else nextIndex(index + 1, true);
+
       setStartEv(false);
     }
   }
@@ -49,7 +51,7 @@ function Slide({ children }: Props) {
 
   useEffect(() => {
     const { current } = refCarousel;
-    const getMaxIndex = current?.children[0].children.length! - 1;
+    const getMaxIndex = current!.children[0].children.length - 1;
 
     function checkIndex() {
       if (index === 0) {
@@ -66,7 +68,7 @@ function Slide({ children }: Props) {
     current?.addEventListener('transitionend', checkIndex);
     return () => {
       current?.removeEventListener('transitionend', checkIndex);
-    }
+    };
   }, [index]);
 
   useEffect(() => {
@@ -75,28 +77,27 @@ function Slide({ children }: Props) {
     const eventMouseMove = (event: any) => {
       const positionReset = event.layerX - initpositinX;
       setPositionX(finishPosition + positionReset);
-    }
+    };
 
     if (startEv) {
       current?.classList.add(style.stopanimation);
       current?.addEventListener('mousemove', eventMouseMove);
-    }
-    else current?.removeEventListener('mousemove', eventMouseMove);
+    } else current?.removeEventListener('mousemove', eventMouseMove);
 
     return () => {
       current?.removeEventListener('mousemove', eventMouseMove);
       current?.removeEventListener('mouseleave', finishEvent);
-    }
+    };
   }, [startEv, refCarousel, initpositinX, finishPosition]);
 
   useEffect(() => {
-    const getElement = refCarousel.current?.children[0];
+    const getElement = refCarousel.current?.children[0]!;
     const lastChild = getElement?.lastChild?.cloneNode(true)!;
     const firstChild = getElement?.firstChild?.cloneNode(true)!;
     getElement?.appendChild(firstChild);
     getElement?.insertBefore(lastChild, getElement.firstChild);
-    setPositionX(-getElement?.clientWidth!);
-    setFinishPosition(-getElement?.clientWidth!);
+    setPositionX(-getElement.clientWidth);
+    setFinishPosition(-getElement.clientWidth);
   }, []);
 
   useEffect(() => {
@@ -116,6 +117,8 @@ function Slide({ children }: Props) {
         onMouseDown={ starEvent }
         onMouseUp={ finishEvent }
         onMouseLeave={ finishEvent }
+        tabIndex={ 0 }
+        role="menuitem"
       >
         <div
           className={ style.slide }
@@ -126,11 +129,11 @@ function Slide({ children }: Props) {
           { children }
         </div>
       </div>
-      <button onClick={ () => nextIndex(index - 1, true) }>Prev</button>
-      <button onClick={ () => nextIndex(index + 1, true) }>Next</button>
-      <button onClick={ () => nextIndex(2, true) }>Next index 2</button>
+      <button type="button" onClick={ () => nextIndex(index - 1, true) }>Prev</button>
+      <button type="button" onClick={ () => nextIndex(index + 1, true) }>Next</button>
+      <button type="button" onClick={ () => nextIndex(2, true) }>Next index 2</button>
     </>
-  )
-}
+  );
+};
 
 export default Slide;

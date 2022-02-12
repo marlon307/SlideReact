@@ -1,11 +1,10 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import type { NextPage } from 'next';
 import Slide from '../components/Slide';
 import SPanel from '../components/SPanel';
 import styles from '../styles/Home.module.css';
 
-const Home: NextPage = () => {
-
+const Home: NextPage = function Home() {
   return (
     <div className={ styles.container }>
       <Slide>
@@ -39,7 +38,7 @@ const Home: NextPage = () => {
       <button onClick={ refCarousel.current.next }>Next</button>
       <button onClick={ () => refCarousel.current.nextIndex(2) }>Next index 2</button> */}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
