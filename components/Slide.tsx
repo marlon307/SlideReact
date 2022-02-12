@@ -2,16 +2,17 @@ import React, {
   ReactNode,
   useState,
   useEffect,
+  createRef,
 } from 'react';
 import windowSize from '../hooks/useWindowSize';
 import style from './style.module.css';
 
 type Props = {
   children: ReactNode;
-  refCarousel: { current: HTMLDivElement | null }
 }
 
-function Slide({ children, refCarousel }: Props) {
+function Slide({ children }: Props) {
+  const refCarousel = createRef<HTMLDivElement>();
   const resizeWindow = windowSize();
   const [index, setIndex] = useState(1);
   const [startEv, setStartEv] = useState(false);

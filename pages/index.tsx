@@ -5,11 +5,10 @@ import SPanel from '../components/SPanel';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
-  const refCarousel = createRef<HTMLDivElement>()!;
 
   return (
     <div className={ styles.container }>
-      <Slide refCarousel={ refCarousel }>
+      <Slide>
         <SPanel>
           <div className={ styles.content }>
             Panel 1
