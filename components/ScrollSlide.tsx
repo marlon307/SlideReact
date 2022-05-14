@@ -20,6 +20,7 @@ function ScrollSlid({ children }: any) {
     const { current } = ref;
     function startEvent(event: any) {
       setInitialPosition(event.layerX - indexPanel);
+
       setEventStarted(true);
     }
 
@@ -28,8 +29,11 @@ function ScrollSlid({ children }: any) {
 
     function finishEvent() {
       const cValue = current?.children[0].clientWidth!;
-      setFinishPosition(cValue * indexPanel);
+
       setIndexPanel(indexPanel + 1);
+
+      setFinishPosition(cValue * indexPanel);
+
       setEventStarted(false);
     }
 
