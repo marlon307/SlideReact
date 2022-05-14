@@ -19,7 +19,7 @@ function ScrollSlid({ children }: any) {
   useEffect(() => {
     const { current } = ref;
     function startEvent(event: any) {
-      setInitialPosition(event.layerX - indexPanel);
+      setInitialPosition(event.layerX);
 
       setEventStarted(true);
     }
@@ -27,12 +27,16 @@ function ScrollSlid({ children }: any) {
     current?.addEventListener('touchstart', startEvent);
     current?.addEventListener('mousedown', startEvent);
 
-    function finishEvent() {
-      const cValue = current?.children[0].clientWidth!;
+    function finishEvent(event: any) {
+      const cValue = current?.children[indexPanel - 1].clientWidth!;
 
-      setIndexPanel(indexPanel + 1);
-
-      setFinishPosition(cValue * indexPanel);
+      if (event.layerX < initialPosition) {
+        setIndexPanel(indexPanel + 1);
+        setFinishPosition(cValue * indexPanel);
+      } else {
+        setIndexPanel(indexPanel - 1);
+        setFinishPosition(cValue - finishPosition);
+      }
 
       setEventStarted(false);
     }
@@ -50,6 +54,7 @@ function ScrollSlid({ children }: any) {
       current?.removeEventListener('touchstart', startEvent);
       current?.removeEventListener('mousedown', startEvent);
       current?.removeEventListener('mousemove', moveEvent);
+      current?.removeEventListener('mouseup', finishEvent);
     };
   }, [enventStarted]);
 
