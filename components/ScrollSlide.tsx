@@ -4,7 +4,7 @@ import style from './sstyle.module.scss';
 function ScrollSlid({ children }: any) {
   const [initialPosition, setInitialPosition] = useState(0);
   const [finishPosition, setFinishPosition] = useState(0);
-  const [indexPanel, setIndexPanel] = useState(0);
+  const [indexPanel, setIndexPanel] = useState(1);
   const [enventStarted, setEventStarted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -19,9 +19,8 @@ function ScrollSlid({ children }: any) {
   useEffect(() => {
     const { current } = ref;
     function startEvent(event: any) {
-      setInitialPosition(event.layerX - finishPosition);
+      setInitialPosition(event.layerX - indexPanel);
       setEventStarted(true);
-      setIndexPanel((state) => state + 1);
     }
 
     current?.addEventListener('touchstart', startEvent);
@@ -30,6 +29,7 @@ function ScrollSlid({ children }: any) {
     function finishEvent() {
       const cValue = current?.children[0].clientWidth!;
       setFinishPosition(cValue * indexPanel);
+      setIndexPanel(indexPanel + 1);
       setEventStarted(false);
     }
 
