@@ -35,7 +35,7 @@ function ScrollSlid({ children }: any) {
         setFinishPosition(cValue * indexPanel);
       } else {
         setIndexPanel(indexPanel - 1);
-        setFinishPosition(cValue - finishPosition);
+        setFinishPosition(finishPosition - cValue);
       }
 
       setEventStarted(false);
