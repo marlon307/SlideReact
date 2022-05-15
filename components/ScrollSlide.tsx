@@ -4,7 +4,7 @@ import style from './sstyle.module.scss';
 function ScrollSlid({ children }: any) {
   const [initialPosition, setInitialPosition] = useState(0);
   const [finishPosition, setFinishPosition] = useState(0);
-  const [indexPanel, setIndexPanel] = useState(1);
+  const [indexPanel, setIndexPanel] = useState(0);
   const [enventStarted, setEventStarted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -20,7 +20,6 @@ function ScrollSlid({ children }: any) {
     const { current } = ref;
     function startEvent(event: any) {
       setInitialPosition(event.layerX);
-
       setEventStarted(true);
     }
 
@@ -28,16 +27,16 @@ function ScrollSlid({ children }: any) {
     current?.addEventListener('mousedown', startEvent);
 
     function finishEvent(event: any) {
-      const cValue = current?.children[indexPanel - 1].clientWidth!;
+      const cValue = current?.children[indexPanel].clientWidth!;
+      const panelsIndex = current?.children.length!;
 
-      if (event.layerX < initialPosition) {
-        setIndexPanel(indexPanel + 1);
-        setFinishPosition(cValue * indexPanel);
-      } else {
-        setIndexPanel(indexPanel - 1);
-        setFinishPosition(finishPosition - cValue);
+      if (event.layerX < initialPosition && indexPanel < panelsIndex - 1) {
+        setIndexPanel((state) => state + 1);
+        setFinishPosition((state) => state + cValue);
+      } else if (event.layerX > initialPosition && finishPosition > 0) {
+        setIndexPanel((state) => state - 1);
+        setFinishPosition((state) => state - cValue);
       }
-
       setEventStarted(false);
     }
 
