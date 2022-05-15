@@ -41,6 +41,7 @@ function ScrollSlid({ children }: any) {
     }
 
     current?.addEventListener('mouseup', finishEvent);
+    // current?.addEventListener('mouseleave', finishEvent);
 
     function moveEvent(event: any) {
       if (enventStarted) {
