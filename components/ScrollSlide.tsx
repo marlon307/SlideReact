@@ -30,10 +30,10 @@ function ScrollSlid({ children }: any) {
       const cValue = current?.children[indexPanel].clientWidth!;
       const panelsIndex = current?.children.length!;
 
-      if (event.layerX < initialPosition && indexPanel < panelsIndex - 1) {
+      if (enventStarted && event.layerX < initialPosition && indexPanel < panelsIndex - 1) {
         setIndexPanel((state) => state + 1);
         setFinishPosition((state) => state + cValue);
-      } else if (event.layerX > initialPosition && finishPosition > 0) {
+      } else if (enventStarted && event.layerX > initialPosition && finishPosition > 0) {
         setIndexPanel((state) => state - 1);
         setFinishPosition((state) => state - cValue);
       }
