@@ -41,7 +41,7 @@ function ScrollSlid({ children }: any) {
     }
 
     current?.addEventListener('mouseup', finishEvent);
-    // current?.addEventListener('mouseleave', finishEvent);
+    current?.addEventListener('mouseleave', finishEvent);
 
     function moveEvent(event: any) {
       if (enventStarted) {
@@ -55,6 +55,7 @@ function ScrollSlid({ children }: any) {
       current?.removeEventListener('mousedown', startEvent);
       current?.removeEventListener('mousemove', moveEvent);
       current?.removeEventListener('mouseup', finishEvent);
+      current?.removeEventListener('mouseleave', finishEvent);
     };
   }, [enventStarted]);
 
