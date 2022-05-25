@@ -9,10 +9,11 @@ function ScrollSlid({ children }: any) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const { current } = ref;
-    current?.scrollTo({
-      left: finishPosition,
-      behavior: 'smooth',
+    const panelIndex = document.getElementById(`panel-${indexPanel}`)!;
+    panelIndex.scrollIntoView({
+      // behavior: 'smooth',
+      block: 'nearest',
+      inline: 'nearest',
     });
   }, [finishPosition]);
 
@@ -23,7 +24,6 @@ function ScrollSlid({ children }: any) {
       setEventStarted(true);
     }
 
-    current?.addEventListener('touchstart', startEvent);
     current?.addEventListener('mousedown', startEvent);
 
     function finishEvent(event: any) {
@@ -51,7 +51,6 @@ function ScrollSlid({ children }: any) {
 
     current?.addEventListener('mousemove', moveEvent);
     return () => {
-      current?.removeEventListener('touchstart', startEvent);
       current?.removeEventListener('mousedown', startEvent);
       current?.removeEventListener('mousemove', moveEvent);
       current?.removeEventListener('mouseup', finishEvent);
@@ -63,8 +62,16 @@ function ScrollSlid({ children }: any) {
     <div
       className={ style.mainpanel }
       ref={ ref }
+      style={ enventStarted ? {
+        scrollSnapType: 'none',
+        scrollBehavior: 'auto',
+      } : {} }
     >
-      { children }
+      { children.map((child: any, index: number) => (
+        <div className={ style.panel } key={ child.props.children } id={ `panel-${index}` }>
+          { child }
+        </div>
+      )) }
     </div>
   );
 }

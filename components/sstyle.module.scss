@@ -2,4 +2,13 @@
   margin-top: 2em;
   display: flex;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  touch-action: manipulation;
+  scroll-behavior: smooth;
+}
+
+.panel {
+  width: 100%;
+  flex: none;
+  scroll-snap-align: start;
 }

@@ -36,26 +36,21 @@ const Home: NextPage = function Home() {
         </SPanel>
       </Slide>
       <ScrollSlide>
-        <SPanel>
-          <div className={ styles.content }>
-            Panel 1
-          </div>
-        </SPanel>
-        <SPanel>
-          <div className={ styles.content }>
-            Panel 2
-          </div>
-        </SPanel>
-        <SPanel>
-          <div className={ styles.content }>
-            Panel 3
-          </div>
-        </SPanel>
-        <SPanel>
-          <div className={ styles.content }>
-            Panel 4
-          </div>
-        </SPanel>
+        <div className={ styles.content }>
+          Panel 1
+        </div>
+
+        <div className={ styles.content }>
+          Panel 2
+        </div>
+
+        <div className={ styles.content }>
+          Panel 3
+        </div>
+
+        <div className={ styles.content }>
+          Panel 4
+        </div>
       </ScrollSlide>
       {/* <button onClick={ refCarousel.current.prev }>Prev</button>
       <button onClick={ refCarousel.current.next }>Next</button>
