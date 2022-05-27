@@ -2,4 +2,18 @@
   margin-top: 2em;
   display: flex;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  touch-action: manipulation;
+  scroll-behavior: smooth;
+}
+
+.mov {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.content {
+  width: 100%;
+  flex: none;
+  scroll-snap-align: start;
 }

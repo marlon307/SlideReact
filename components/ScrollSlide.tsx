@@ -1,20 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react';
 import style from './sstyle.module.scss';
-
+// https://jsfiddle.net/pjqxrgwu/
+// https://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
 function ScrollSlid({ children }: any) {
   const [initialPosition, setInitialPosition] = useState(0);
-  const [finishPosition, setFinishPosition] = useState(0);
   const [indexPanel, setIndexPanel] = useState(0);
   const [enventStarted, setEventStarted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const { current } = ref;
-    current?.scrollTo({
-      left: finishPosition,
-      behavior: 'smooth',
+    const elements = ref.current!.querySelectorAll('[data-index]');
+
+    const observer = new IntersectionObserver(([entries]) => {
+      if (entries.isIntersecting) {
+        entries.target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest',
+        });
+        setIndexPanel(+entries.target.id.replace('panel-', ''));
+      }
+    }, {
+      threshold: 1,
     });
-  }, [finishPosition]);
+
+    elements.forEach((element) => {
+      observer.observe(element);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const { current } = ref;
@@ -23,20 +40,9 @@ function ScrollSlid({ children }: any) {
       setEventStarted(true);
     }
 
-    current?.addEventListener('touchstart', startEvent);
     current?.addEventListener('mousedown', startEvent);
 
-    function finishEvent(event: any) {
-      const cValue = current?.children[indexPanel].clientWidth!;
-      const panelsIndex = current?.children.length!;
-
-      if (enventStarted && event.layerX < initialPosition && indexPanel < panelsIndex - 1) {
-        setIndexPanel((state) => state + 1);
-        setFinishPosition((state) => state + cValue);
-      } else if (enventStarted && event.layerX > initialPosition && finishPosition > 0) {
-        setIndexPanel((state) => state - 1);
-        setFinishPosition((state) => state - cValue);
-      }
+    function finishEvent() {
       setEventStarted(false);
     }
 
@@ -45,13 +51,13 @@ function ScrollSlid({ children }: any) {
 
     function moveEvent(event: any) {
       if (enventStarted) {
-        current?.scrollTo((initialPosition + finishPosition) - event.layerX, 0);
+        const cValue = current?.children[indexPanel].clientWidth!;
+        current?.scrollTo((initialPosition + (indexPanel * cValue)) - event.layerX, 0);
       }
     }
 
     current?.addEventListener('mousemove', moveEvent);
     return () => {
-      current?.removeEventListener('touchstart', startEvent);
       current?.removeEventListener('mousedown', startEvent);
       current?.removeEventListener('mousemove', moveEvent);
       current?.removeEventListener('mouseup', finishEvent);
@@ -61,10 +67,21 @@ function ScrollSlid({ children }: any) {
 
   return (
     <div
-      className={ style.mainpanel }
       ref={ ref }
+      className={
+        `${style.mainpanel}${enventStarted ? ` ${style.mov}` : ''}`
+      }
     >
-      { children }
+      { children.map((child: any, index: number) => (
+        <div
+          className={ style.content }
+          key={ child.props.children }
+          id={ `panel-${index}` }
+          data-index={ index }
+        >
+          { child }
+        </div>
+      )) }
     </div>
   );
 }
