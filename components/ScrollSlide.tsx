@@ -18,7 +18,6 @@ function ScrollSlid({ children }: any) {
           block: 'nearest',
           inline: 'nearest',
         });
-
         setIndexPanel(+entries.target.id.replace('panel-', ''));
       }
     }, {
@@ -28,6 +27,7 @@ function ScrollSlid({ children }: any) {
     elements.forEach((element) => {
       observer.observe(element);
     });
+
     return () => {
       observer.disconnect();
     };
@@ -67,10 +67,10 @@ function ScrollSlid({ children }: any) {
 
   return (
     <div
+      ref={ ref }
       className={
         `${style.mainpanel}${enventStarted ? ` ${style.mov}` : ''}`
       }
-      ref={ ref }
     >
       { children.map((child: any, index: number) => (
         <div

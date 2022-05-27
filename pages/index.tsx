@@ -56,6 +56,7 @@ const Home: NextPage = function Home() {
           Panel 4
         </div>
       </ScrollSlide>
+
       {/* <button onClick={ refCarousel.current.prev }>Prev</button>
       <button onClick={ refCarousel.current.next }>Next</button>
       <button onClick={ () => refCarousel.current.nextIndex(2) }>Next index 2</button> */}
