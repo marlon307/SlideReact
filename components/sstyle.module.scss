@@ -7,7 +7,12 @@
   scroll-behavior: smooth;
 }
 
-.panel {
+.mov {
+  scroll-snap-type: none;
+  scroll-behavior: unset;
+}
+
+.content {
   width: 100%;
   flex: none;
   scroll-snap-align: start;
