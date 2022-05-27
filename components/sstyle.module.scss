@@ -3,11 +3,11 @@
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  touch-action: manipulation;
   scroll-behavior: smooth;
+  touch-action: manipulation;
 }
 
-.mov {
+.stop_animation {
   scroll-snap-type: none;
   scroll-behavior: auto;
 }

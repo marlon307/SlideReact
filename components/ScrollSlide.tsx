@@ -9,7 +9,7 @@ function ScrollSlid({ children }: any) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const elements = ref.current!.querySelectorAll('[data-index]');
+    const elements = ref.current!.querySelectorAll('*');
 
     const observer = new IntersectionObserver(([entries]) => {
       if (entries.isIntersecting) {
@@ -36,6 +36,7 @@ function ScrollSlid({ children }: any) {
   useEffect(() => {
     const { current } = ref;
     function startEvent(event: any) {
+      current?.classList.add(style.stop_animation);
       setInitialPosition(event.layerX);
       setEventStarted(true);
     }
@@ -43,6 +44,7 @@ function ScrollSlid({ children }: any) {
     current?.addEventListener('mousedown', startEvent);
 
     function finishEvent() {
+      current?.classList.remove(style.stop_animation);
       setEventStarted(false);
     }
 
@@ -68,16 +70,13 @@ function ScrollSlid({ children }: any) {
   return (
     <div
       ref={ ref }
-      className={
-        `${style.mainpanel}${enventStarted ? ` ${style.mov}` : ''}`
-      }
+      className={ style.mainpanel }
     >
       { children.map((child: any, index: number) => (
         <div
           className={ style.content }
           key={ child.props.children }
           id={ `panel-${index}` }
-          data-index={ index }
         >
           { child }
         </div>

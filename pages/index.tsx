@@ -1,14 +1,14 @@
 import React from 'react';
 import type { NextPage } from 'next';
-// import Slide from '../components/Slide';
-// import SPanel from '../components/SPanel';
+import Slide from '../components/Slide';
+import SPanel from '../components/SPanel';
 import styles from '../styles/Home.module.css';
 import ScrollSlide from '../components/ScrollSlide';
 
 const Home: NextPage = function Home() {
   return (
     <div className={ styles.container }>
-      {/* <Slide>
+      <Slide>
         <SPanel>
           <div className={ styles.content }>
             Panel 1
@@ -34,7 +34,7 @@ const Home: NextPage = function Home() {
             Panel 5
           </div>
         </SPanel>
-      </Slide> */}
+      </Slide>
       <ScrollSlide>
         <div className={ styles.content }>
           Panel 0
