@@ -13,16 +13,15 @@ function ScrollSlid({ children }: any) {
 
     const observer = new IntersectionObserver(([entries]) => {
       if (entries.isIntersecting) {
-        entries.target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'nearest',
-        });
-        setIndexPanel(+entries.target.id.replace('panel-', ''));
+        setIndexPanel(Number(entries.target.id.replace('panel-', '')));
       }
-    }, {
-      threshold: 1,
-    });
+
+      entries.target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest',
+      });
+    }, { threshold: 1 });
 
     elements.forEach((element) => {
       observer.observe(element);
